@@ -11,8 +11,8 @@ import com.bancobts.apphexagonal.core.model.response.ClienteResponse;
 import com.bancobts.apphexagonal.core.ports.in.ClienteUseCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Component
@@ -21,26 +21,23 @@ public class ClienteApplicationImpl implements ClienteApplication {
     private final ClienteUseCasePort cadastroClienteUseCase;
 
     @Override
-    public List<ClienteResumoDto> buscarClientes() {
-        List<ClienteResponse> clientesCadastrados = cadastroClienteUseCase.buscarClientesCadastrados();
+    public Flux<ClienteResumoDto> buscarClientes() {
 
-        if (clientesCadastrados.isEmpty()) {
-            throw new NenhumConteudoEncontradoException();
-        }
-
-        return ClienteApplicationMapper.unmarshall(clientesCadastrados);
+        return cadastroClienteUseCase.buscarClientesCadastrados()
+                .switchIfEmpty(Mono.error(new NenhumConteudoEncontradoException()))
+                .flatMap(ClienteApplicationMapper::unmarshall);
     }
 
     @Override
-    public ClienteCompletoDto buscarClientePorId(Long clienteId) {
-        ClienteResponse clienteCadastrado = cadastroClienteUseCase.buscarClientePorId(clienteId);
+    public Mono<ClienteCompletoDto> buscarClientePorId(Long clienteId) {
+        Mono<ClienteResponse> clienteCadastrado = cadastroClienteUseCase.buscarClientePorId(clienteId);
         return ClienteApplicationMapper.unmarshallCompleto(clienteCadastrado);
     }
 
     @Override
-    public ClienteResumoDto cadastrarCliente(ClienteInput novoClienteInput) {
+    public Mono<ClienteResumoDto> cadastrarCliente(ClienteInput novoClienteInput) {
         ClienteRequest novoCliente = ClienteApplicationMapper.marshall(novoClienteInput);
-        ClienteResponse novoClienteCadastrado = cadastroClienteUseCase.cadastrarNovoCliente(novoCliente);
+        Mono<ClienteResponse> novoClienteCadastrado = cadastroClienteUseCase.cadastrarNovoCliente(novoCliente);
         return ClienteApplicationMapper.unmarshall(novoClienteCadastrado);
     }
 

@@ -6,6 +6,7 @@ import com.bancobts.apphexagonal.core.ports.in.ContaBancariaUseCasePort;
 import com.bancobts.apphexagonal.core.ports.out.ContaBancariaPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Random;
 
@@ -18,9 +19,9 @@ public class CadastroContaBancariaUseCaseImpl implements ContaBancariaUseCasePor
 
     @Override
     public ContaBancariaResponse associarContaComCliente(Long clienteId) {
-        ClienteResponse clienteEncontrado = cadastroClienteUseCase.buscarClientePorId(clienteId);
+        Mono<ClienteResponse> clienteEncontrado = cadastroClienteUseCase.buscarClientePorId(clienteId);
         ContaBancariaResponse contaBancariaCriada = gerarDadosBancariosCliente();
-        return contaBancariaPersistencePort.associarContaComCliente(clienteEncontrado, contaBancariaCriada);
+        return contaBancariaPersistencePort.associarContaComCliente(clienteEncontrado.block(), contaBancariaCriada);
     }
 
     private ContaBancariaResponse gerarDadosBancariosCliente() {

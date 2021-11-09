@@ -9,6 +9,8 @@ import com.bancobts.apphexagonal.core.ports.out.ClientePersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,20 +22,22 @@ public class ClientePersistenceAdapter implements ClientePersistencePort {
     private final ClienteRepository clienteRepository;
 
     @Override
-    public List<ClienteResponse> buscarClientesCadastrados() {
-        List<ClienteEntity> clientesCadastrados = clienteRepository.findAll();
-        return ClienteMapper.unmarshall(clientesCadastrados);
+    public Flux<ClienteResponse> buscarClientesCadastrados() {
+        List<ClienteEntity> clientesEntities = clienteRepository.findAll();
+
+        return Flux.fromIterable(clientesEntities)
+                .flatMap(ClienteMapper::unmarshall);
     }
 
     @Override
-    public Optional<ClienteResponse> buscarClienteCadastradoPorId(Long clienteId) {
+    public Mono<ClienteResponse> buscarClienteCadastradoPorId(Long clienteId) {
         Optional<ClienteEntity> clienteEncontradoPorId = clienteRepository.findById(clienteId);
         return ClienteMapper.unmarshall(clienteEncontradoPorId);
     }
 
     @Transactional
     @Override
-    public ClienteResponse salvarNovoCliente(ClienteRequest novoCliente) {
+    public Mono<ClienteResponse> salvarNovoCliente(ClienteRequest novoCliente) {
         ClienteEntity novoClienteEntity = ClienteMapper.marshall(novoCliente);
         ClienteEntity clienteEntityCadastrado = clienteRepository.save(novoClienteEntity);
         return ClienteMapper.unmarshall(clienteEntityCadastrado);

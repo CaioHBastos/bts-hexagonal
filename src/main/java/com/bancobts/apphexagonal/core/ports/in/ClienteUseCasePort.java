@@ -2,14 +2,14 @@ package com.bancobts.apphexagonal.core.ports.in;
 
 import com.bancobts.apphexagonal.core.model.request.ClienteRequest;
 import com.bancobts.apphexagonal.core.model.response.ClienteResponse;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface ClienteUseCasePort {
 
-    List<ClienteResponse> buscarClientesCadastrados();
+    Flux<ClienteResponse> buscarClientesCadastrados();
 
-    ClienteResponse buscarClientePorId(Long clienteId);
+    Mono<ClienteResponse> buscarClientePorId(Long clienteId);
 
-    ClienteResponse cadastrarNovoCliente(ClienteRequest novoCliente);
+    Mono<ClienteResponse> cadastrarNovoCliente(ClienteRequest novoCliente);
 }

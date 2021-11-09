@@ -6,36 +6,20 @@ import com.bancobts.apphexagonal.core.model.response.ClienteResponse;
 import com.bancobts.apphexagonal.core.model.response.ContaBancariaResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClienteMapper {
 
-
-    public static List<ClienteResponse> unmarshall(List<ClienteEntity> clientesCadastrados) {
-        return clientesCadastrados.stream()
-                .map(ClienteMapper::unmarshall)
-                .collect(Collectors.toList());
-    }
-
-    public static Optional<ClienteResponse> unmarshall(Optional<ClienteEntity> clienteCadastrado) {
-        if (clienteCadastrado.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable(unmarshall(clienteCadastrado.get()));
-    }
-
-    public static ClienteResponse unmarshall(ClienteEntity clienteCadastrado) {
-        if (ObjectUtils.isEmpty(clienteCadastrado)) {
+    public static Mono<ClienteResponse> unmarshall(ClienteEntity clienteCadastrado) {
+        if (Objects.isNull(clienteCadastrado)) {
             return null;
         }
 
-        return ClienteResponse.builder()
+        return Mono.just(ClienteResponse.builder()
                 .id(clienteCadastrado.getId())
                 .primeiroNome(clienteCadastrado.getPrimeiroNome())
                 .ultimoNome(clienteCadastrado.getUltimoNome())
@@ -43,7 +27,7 @@ public class ClienteMapper {
                 .ddd(clienteCadastrado.getDdd())
                 .celular(clienteCadastrado.getCelular())
                 .contaBancaria(ContaBancariaMapper.unmarshall(clienteCadastrado.getContaBancaria()))
-                .build();
+                .build());
     }
 
     public static ClienteEntity marshall(ClienteRequest novoCliente) {
@@ -66,5 +50,13 @@ public class ClienteMapper {
                 .celular(clienteEncontrado.getCelular())
                 .contaBancaria(ContaBancariaMapper.marshall(contaBancariaCriada))
                 .build();
+    }
+
+    public static Mono<ClienteResponse> unmarshall(Optional<ClienteEntity> clienteEncontradoPorId) {
+        if (clienteEncontradoPorId.isEmpty()) {
+            return Mono.empty();
+        }
+
+        return unmarshall(clienteEncontradoPorId.get());
     }
 }
