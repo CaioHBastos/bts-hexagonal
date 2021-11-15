@@ -1,13 +1,13 @@
 package com.bancobts.apphexagonal.core.usecase;
 
+import com.bancobts.apphexagonal.core.exception.ClienteComContaBancariaException;
 import com.bancobts.apphexagonal.core.model.response.ClienteResponse;
 import com.bancobts.apphexagonal.core.model.response.ContaBancariaResponse;
 import com.bancobts.apphexagonal.core.ports.in.ContaBancariaUseCasePort;
 import com.bancobts.apphexagonal.core.ports.out.ContaBancariaPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -19,27 +19,20 @@ public class CadastroContaBancariaUseCaseImpl implements ContaBancariaUseCasePor
     @Override
     public ContaBancariaResponse associarContaComCliente(Long clienteId) {
         ClienteResponse clienteEncontrado = cadastroClienteUseCase.buscarClientePorId(clienteId);
-        ContaBancariaResponse contaBancariaCriada = gerarDadosBancariosCliente();
+
+        verificarSeOClienteJaTemContaBancariaAssociada(clienteEncontrado);
+
+        ContaBancariaResponse contaBancariaCriada = new ContaBancariaResponse();
+        contaBancariaCriada.gerarDadosBancarios();
+
         return contaBancariaPersistencePort.associarContaComCliente(clienteEncontrado, contaBancariaCriada);
     }
 
-    private ContaBancariaResponse gerarDadosBancariosCliente() {
+    private void verificarSeOClienteJaTemContaBancariaAssociada(ClienteResponse clienteEncontrado) {
 
-        Random gerarNumeroAleatorio = new Random();
-        String numeroAleatorio = String.valueOf(gerarNumeroAleatorio.nextInt(999999));
-
-        String numeroConta = numeroAleatorio.substring(0, 5);
-        String digitoConta = numeroAleatorio.substring(5);
-
-        if (digitoConta.isEmpty()) {
-            digitoConta = "X";
+        if (ObjectUtils.isNotEmpty(clienteEncontrado.getContaBancaria())) {
+            throw new ClienteComContaBancariaException(
+                    String.format("O cliente %d, já tem uma conta bancária associada.", clienteEncontrado.getId()));
         }
-
-        return ContaBancariaResponse.builder()
-                .codigoBanco("268")
-                .numeroConta(numeroConta)
-                .digitoConta(digitoConta)
-                .build();
     }
-
 }
