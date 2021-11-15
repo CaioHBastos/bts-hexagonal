@@ -2,14 +2,15 @@ package com.bancobts.apphexagonal.core.ports.out;
 
 import com.bancobts.apphexagonal.core.model.request.ClienteRequest;
 import com.bancobts.apphexagonal.core.model.response.ClienteResponse;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ClientePersistencePort {
 
-    Flux<ClienteResponse> buscarClientesCadastrados();
+    List<ClienteResponse> buscarClientesCadastrados();
 
-    Mono<ClienteResponse> buscarClienteCadastradoPorId(Long clienteId);
+    Optional<ClienteResponse> buscarClienteCadastradoPorId(Long clienteId);
 
-    Mono<ClienteResponse> salvarNovoCliente(ClienteRequest novoCliente);
+    ClienteResponse salvarNovoCliente(ClienteRequest novoCliente);
 }

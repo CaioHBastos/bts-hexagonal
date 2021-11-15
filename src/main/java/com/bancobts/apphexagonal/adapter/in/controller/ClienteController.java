@@ -8,10 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -21,20 +20,20 @@ public class ClienteController {
     private ClienteApplication clienteApplication;
 
     @GetMapping
-    public ResponseEntity<Flux<ClienteResumoDto>> buscarTodos() {
-        Flux<ClienteResumoDto> clientesCadastrados = clienteApplication.buscarClientes();
+    public ResponseEntity<List<ClienteResumoDto>> buscarTodos() {
+        List<ClienteResumoDto> clientesCadastrados = clienteApplication.buscarClientes();
         return ResponseEntity.ok(clientesCadastrados);
     }
 
     @GetMapping("/{clienteId}")
-    public ResponseEntity<Mono<ClienteCompletoDto>> buscarPorId(@PathVariable Long clienteId) {
-        Mono<ClienteCompletoDto> clienteCadastrado = clienteApplication.buscarClientePorId(clienteId);
+    public ResponseEntity<ClienteCompletoDto> buscarPorId(@PathVariable Long clienteId) {
+        ClienteCompletoDto clienteCadastrado = clienteApplication.buscarClientePorId(clienteId);
         return ResponseEntity.ok(clienteCadastrado);
     }
 
     @PostMapping
-    public ResponseEntity<Mono<ClienteResumoDto>> adicionar(@RequestBody @Valid ClienteInput novoClienteInput) {
-        Mono<ClienteResumoDto> novoClienteCadastrado = clienteApplication.cadastrarCliente(novoClienteInput);
+    public ResponseEntity<ClienteResumoDto> adicionar(@RequestBody @Valid ClienteInput novoClienteInput) {
+        ClienteResumoDto novoClienteCadastrado = clienteApplication.cadastrarCliente(novoClienteInput);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoClienteCadastrado);
     }
 }
