@@ -1,9 +1,9 @@
 package com.bancobts.apphexagonal.adapter.in.controller;
 
-import com.bancobts.apphexagonal.application.ClienteApplication;
-import com.bancobts.apphexagonal.application.dto.ClienteCompletoDto;
-import com.bancobts.apphexagonal.application.dto.ClienteResumoDto;
-import com.bancobts.apphexagonal.application.dto.input.ClienteInput;
+import com.bancobts.apphexagonal.core.application.ClienteApplication;
+import com.bancobts.apphexagonal.core.application.dto.ClienteCompletoDto;
+import com.bancobts.apphexagonal.core.application.dto.ClienteResumoDto;
+import com.bancobts.apphexagonal.core.application.dto.input.ClienteInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

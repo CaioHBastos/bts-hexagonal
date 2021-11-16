@@ -1,7 +1,7 @@
 package com.bancobts.apphexagonal.adapter.out.mapper;
 
 import com.bancobts.apphexagonal.adapter.out.entity.ContaBancariaEntity;
-import com.bancobts.apphexagonal.core.model.response.ContaBancariaResponse;
+import com.bancobts.apphexagonal.core.domain.model.response.ContaBancariaResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

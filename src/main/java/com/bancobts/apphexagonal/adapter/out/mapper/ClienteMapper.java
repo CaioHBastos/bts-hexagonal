@@ -1,9 +1,9 @@
 package com.bancobts.apphexagonal.adapter.out.mapper;
 
 import com.bancobts.apphexagonal.adapter.out.entity.ClienteEntity;
-import com.bancobts.apphexagonal.core.model.request.ClienteRequest;
-import com.bancobts.apphexagonal.core.model.response.ClienteResponse;
-import com.bancobts.apphexagonal.core.model.response.ContaBancariaResponse;
+import com.bancobts.apphexagonal.core.domain.model.request.ClienteRequest;
+import com.bancobts.apphexagonal.core.domain.model.response.ClienteResponse;
+import com.bancobts.apphexagonal.core.domain.model.response.ContaBancariaResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;

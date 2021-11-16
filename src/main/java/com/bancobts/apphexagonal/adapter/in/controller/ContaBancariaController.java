@@ -1,7 +1,7 @@
 package com.bancobts.apphexagonal.adapter.in.controller;
 
-import com.bancobts.apphexagonal.application.ContaBancariaApplication;
-import com.bancobts.apphexagonal.application.dto.ContaBancariaDto;
+import com.bancobts.apphexagonal.core.application.ContaBancariaApplication;
+import com.bancobts.apphexagonal.core.application.dto.ContaBancariaDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

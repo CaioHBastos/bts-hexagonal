@@ -1,8 +1,8 @@
 package com.bancobts.apphexagonal.exception;
 
-import com.bancobts.apphexagonal.application.exception.NenhumConteudoEncontradoException;
-import com.bancobts.apphexagonal.core.exception.ClienteComContaBancariaException;
-import com.bancobts.apphexagonal.core.exception.RegistroNaoEncontradoException;
+import com.bancobts.apphexagonal.core.application.exception.NenhumConteudoEncontradoException;
+import com.bancobts.apphexagonal.core.domain.exception.ClienteComContaBancariaException;
+import com.bancobts.apphexagonal.core.domain.exception.RegistroNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
